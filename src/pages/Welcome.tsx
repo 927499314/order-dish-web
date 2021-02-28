@@ -15,7 +15,7 @@ const CodePreview: React.FC = ({ children }) => (
 export default (): React.ReactNode => {
   const intl = useIntl();
   return (
-    <PageContainer>
+    // <PageContainer>
       <Card>
         <Alert
           message={intl.formatMessage({
@@ -58,6 +58,6 @@ export default (): React.ReactNode => {
         </Typography.Text>
         <CodePreview>yarn add @ant-design/pro-layout</CodePreview>
       </Card>
-    </PageContainer>
+    // </PageContainer>
   );
 };

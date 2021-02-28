@@ -1,6 +1,6 @@
-import { Tooltip, Tag } from 'antd';
+import { Tooltip, Tag, Badge } from 'antd';
 import type { Settings as ProSettings } from '@ant-design/pro-layout';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import React from 'react';
 import type { ConnectProps } from 'umi';
 import { connect, SelectLang } from 'umi';
@@ -30,7 +30,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
 
   return (
     <div className={className}>
-      <HeaderSearch
+      {/* <HeaderSearch
         className={`${styles.action} ${styles.search}`}
         placeholder="站内搜索"
         defaultValue="umi ui"
@@ -52,8 +52,8 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
         // onSearch={value => {
         //   //console.log('input', value);
         // }}
-      />
-      <Tooltip title="使用文档">
+      /> */}
+      {/* <Tooltip title="使用文档">
         <a
           style={{
             color: 'inherit',
@@ -65,14 +65,27 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
         >
           <QuestionCircleOutlined />
         </a>
-      </Tooltip>
+      </Tooltip> */}
+    
+      <a href="#"
+        style={{
+          color: 'inherit',
+          marginRight: '10px'
+        }}>
+        <Badge count={1} size="small">
+
+          <ShoppingCartOutlined style={{ fontSize: '18px' }} />
+
+        </Badge>
+      </a>
+
       <Avatar />
       {REACT_APP_ENV && (
         <span>
           <Tag color={ENVTagColor[REACT_APP_ENV]}>{REACT_APP_ENV}</Tag>
         </span>
       )}
-      <SelectLang className={styles.action} />
+      {/* <SelectLang className={styles.action} /> */}
     </div>
   );
 };

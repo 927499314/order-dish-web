@@ -211,7 +211,7 @@ const TableList: React.FC = () => {
   ];
 
   return (
-    <PageContainer>
+    <>
       <ProTable<TableListItem>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
@@ -351,7 +351,7 @@ const TableList: React.FC = () => {
           />
         )}
       </Drawer>
-    </PageContainer>
+    </>
   );
 };
 

@@ -8,7 +8,7 @@ import type {
   BasicLayoutProps as ProLayoutProps,
   Settings,
 } from '@ant-design/pro-layout';
-import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
+import ProLayout, { DefaultFooter, PageContainer } from '@ant-design/pro-layout';
 import React, { useEffect, useMemo, useRef } from 'react';
 import type { Dispatch } from 'umi';
 import { Link, useIntl, connect, history } from 'umi';
@@ -56,26 +56,26 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
 
 const defaultFooterDom = (
   <DefaultFooter
-    copyright={`${new Date().getFullYear()} 蚂蚁集团体验技术部出品`}
+    copyright={`${new Date().getFullYear()} 出品`}
     links={[
-      {
-        key: 'Ant Design Pro',
-        title: 'Ant Design Pro',
-        href: 'https://pro.ant.design',
-        blankTarget: true,
-      },
-      {
-        key: 'github',
-        title: <GithubOutlined />,
-        href: 'https://github.com/ant-design/ant-design-pro',
-        blankTarget: true,
-      },
-      {
-        key: 'Ant Design',
-        title: 'Ant Design',
-        href: 'https://ant.design',
-        blankTarget: true,
-      },
+      // {
+      //   key: 'Ant Design Pro',
+      //   title: 'Ant Design Pro',
+      //   href: 'https://pro.ant.design',
+      //   blankTarget: true,
+      // },
+      // {
+      //   key: 'github',
+      //   title: <GithubOutlined />,
+      //   href: 'https://github.com/ant-design/ant-design-pro',
+      //   blankTarget: true,
+      // },
+      // {
+      //   key: 'Ant Design',
+      //   title: 'Ant Design',
+      //   href: 'https://ant.design',
+      //   blankTarget: true,
+      // },
     ]}
   />
 );
@@ -167,7 +167,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       }}
     >
       <Authorized authority={authorized!.authority} noMatch={noMatch}>
-        {children}
+        {/* {children} */}
+        <PageContainer>{children}</PageContainer>
       </Authorized>
     </ProLayout>
   );
