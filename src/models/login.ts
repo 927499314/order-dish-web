@@ -13,19 +13,19 @@ export type StateType = {
   currentAuthority?: 'user' | 'guest' | 'admin';
 };
 
-export type LoginModelType = {
-  namespace: string;
-  state: StateType;
-  effects: {
-    login: Effect;
-    logout: Effect;
-  };
-  reducers: {
-    changeLoginStatus: Reducer<StateType>;
-  };
-};
+// export type LoginModelType = {
+//   namespace: string;
+//   state: StateType;
+//   effects: {
+//     login: Effect;
+//     logout: Effect;
+//   };
+//   reducers: {
+//     changeLoginStatus: Reducer<StateType>;
+//   };
+// };
 
-const Model: LoginModelType = {
+const Model = {
   namespace: 'login',
 
   state: {

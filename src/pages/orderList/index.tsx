@@ -13,16 +13,21 @@ function OrderList() {
   useEffect(() => {
     fetchOrderList().then(res => {
       // console.log(res);
-      if (res.status === 0) {
-        setOrderList(res.data)
-      }
+      // if (res.status === 0) {
+      setOrderList(res)
+      console.log(res);
+      // }
     })
   }, [])
+
+  const handlePayMoney = ()=>{
+    
+  }
 
   const columns = [
     {
       title: '订单号',
-      dataIndex: 'orderId',
+      dataIndex: '_id',
       width: 100,
       align: 'center'
     },
@@ -50,19 +55,16 @@ function OrderList() {
       dataIndex: 'status',
       width: 120,
       align: 'center',
-      render: (text: number) => {
-        switch (text) {
-          case 0: return <Tag color="blue">用餐中</Tag>
-          case 1: return <Tag color="green">已结账</Tag>
-        }
+      render: (text: boolean) => {
+        return text ? <Tag color="blue">已结账</Tag> : <Tag color="green">用餐中</Tag>
       }
     },
     {
       title: '创建时间',
-      dataIndex: 'createAt',
+      dataIndex: 'createdAt',
       width: 200,
       align: 'center',
-      render: (text: any) => text ? <span>moment(text).format('YYYY-MM-DD HH:MM:SS')</span> : ''
+      render: (text: any) => text ? <span>{moment(text).format('YYYY-MM-DD HH:MM:SS')}</span> : ''
     },
     {
       title: '操作',
@@ -70,7 +72,8 @@ function OrderList() {
       render: (_, record) => {
         return <Space>
           <Button size="small" >详情</Button>
-          <Button type="primary" size="small" disabled={record.status}>结账</Button>
+          <Button type="primary" size="small" 
+          disabled={record.status} onClick={handlePayMoney}>结账</Button>
         </Space>
       }
     },
@@ -80,7 +83,7 @@ function OrderList() {
     <div className="orderListStyle">
       <Table
         bordered
-        rowKey="orderId"
+        rowKey="_id"
         dataSource={orderList}
         columns={columns}
         loading={tableLoading}

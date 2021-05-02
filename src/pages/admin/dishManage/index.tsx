@@ -117,7 +117,7 @@ export default (): React.ReactNode => {
     fetchDishList(pagination).then(res => {
       const { pageNum, pageSize, total, data } = res
       data.map((item: any, index: number) => {
-        item.index = index + 1;
+        item.index = (pageNum - 1) * pageSize + index + 1;
       })
       setPagination({ pageNum, pageSize, total })
       setDishList(data)
@@ -143,7 +143,7 @@ export default (): React.ReactNode => {
           pageSize: pagination.pageSize,
           total: pagination.total,
           showSizeChanger: true,
-          // pageSizeOptions: '[5, 10, 20, 50]',
+          pageSizeOptions: ['5', '10', '15', '20'],
           onChange: (pageNum, pageSize: number) => {
             setPagination({ ...pagination, pageNum, pageSize });
             setNumber(number + 1)

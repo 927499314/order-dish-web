@@ -53,14 +53,14 @@
                     component: './admin/tableManage',
                     authority: ['admin'],
                   },
+                  {
+                    path: '/admin/dipendente-manage',
+                    name: 'dipendente-manage',
+                    icon: 'smile',
+                    component: './admin/dipendenteManage',
+                    authority: ['admin'],
+                  },
                 ],
-              },
-              {
-                name: 'list.table-list',
-                icon: 'table',
-                path: '/list',
-                hideInMenu: true,
-                component: './TableList',
               },
               {
                 name: 'dishList',
@@ -75,11 +75,18 @@
                 component: './mealTable',
               },
               {
+                name: 'shoppingCart',
+                icon: 'smile',
+                path: '/shoppingCart',
+                component: './shoppingCart',
+              },
+              {
                 name: 'orderList',
                 icon: 'BarsOutlined',
                 path: '/orderList',
                 component: './orderList',
               },
+              
               {
                 component: './404',
               },

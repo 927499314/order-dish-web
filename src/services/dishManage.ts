@@ -9,6 +9,12 @@ export async function fetchDishList(params: any) {
     })
 }
 
+export async function fetchDish(params: any) {
+    return request(`${baseUrl}/dish`, {
+        method: 'GET'
+    })
+}
+
 // 添加菜品
 export async function addDish(params: any) {
     return request(`${baseUrl}/dish`, {

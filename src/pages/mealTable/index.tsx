@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Image } from 'antd';
+import { Card, Row, Col, Image, Button } from 'antd';
 import { history } from 'umi';
 // import { fetchDishList } from '@/services/dishList'
 import './index.less';
@@ -9,23 +9,28 @@ const { Meta } = Card;
 const mealTableList = [
     {
         tableId: 1,
-        tableSize: 'small'
+        tableSize: 'small',
+        status: 0
     },
     {
         tableId: 2,
-        tableSize: 'small'
+        tableSize: 'small',
+        status: 0
     },
     {
         tableId: 3,
-        tableSize: 'small'
+        tableSize: 'small',
+        status: 1
     },
     {
         tableId: 4,
-        tableSize: 'middle'
+        tableSize: 'middle',
+        status: 1
     },
     {
         tableId: 5,
-        tableSize: 'middle'
+        tableSize: 'middle',
+        status: 0
     }
 ]
 
@@ -39,10 +44,9 @@ const countSize = (size: any) => {
 
 export default function MealTable() {
 
-    const handleTableDetails = (id) => {
-        console.log(id);
+    const handleOrder = (id: any) => {
         history.push({
-            pathname: '/mealTable/orderDetail',
+            pathname: '/dishList',
             query: {
                 id
             }
@@ -55,10 +59,11 @@ export default function MealTable() {
                 {
                     mealTableList.map(item => (
                         <Col span={6} key={item.tableId}>
-                            <Card size="small" hoverable className="mealTableCard" style={{ width: 200, height: 200 }} onClick={() => handleTableDetails(item.tableId)}>
+                            <Card size="small" hoverable className="mealTableCard" style={{ width: 180, height: 180 }} >
                                 <div style={{ fontSize: 20 }}>餐桌号：{item.tableId}</div>
                                 <div>{countSize(item.tableSize)}</div>
-                                <div style={{ fontSize: 16 }}>用餐中</div>
+                                {item.status === 1 ? <div style={{ fontSize: 16 }}>用餐中</div> : <Button onClick={() => handleOrder(item.tableId)}>点餐</Button>}
+
                             </Card>
                         </Col>
                     ))

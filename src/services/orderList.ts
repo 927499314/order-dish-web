@@ -1,15 +1,23 @@
 import request from 'umi-request'
 
-const baseUrl = 'https://mock.cangdu.org/mock/601ce0f342065059c9c81698/orderManage'
+const baseUrl = 'http://localhost:4000'
 
 // 获取所有订单列表
 export async function fetchOrderList() {
-    return request(`${baseUrl}/orderList`)
+    return request(`${baseUrl}/order`)
+}
+
+// 下单
+export async function addOrder(params: any) {
+    return request(`${baseUrl}/order`, {
+        method: 'POST',
+        data:params
+    })
 }
 
 // 结账
 export async function confirmPay(params: any) {
-    return request(`${baseUrl}/orderList`, {
+    return request(`${baseUrl}/order`, {
         method: 'PUT',
         params
     })

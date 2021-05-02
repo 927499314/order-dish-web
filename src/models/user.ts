@@ -1,6 +1,5 @@
-import type { Effect, Reducer } from 'umi';
-
 import { queryCurrent, query as queryUsers } from '@/services/user';
+import { Reducer, Effect } from 'umi';
 
 export type CurrentUser = {
   avatar?: string;

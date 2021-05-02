@@ -1,46 +1,81 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Button } from 'antd';
-// import { history } from 'umi';
+import { Card, Row, Col, Button, Space, Modal } from 'antd';
+import { history, connect } from 'umi';
 // import { fetchDishList } from '@/services/dishList'
-import { fetchDishList } from '@/services/dishManage'
+import { fetchDish } from '@/services/dishManage'
 import './index.less';
+import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
-export default function DishList(props) {
+function DishList({ dispatch, shoppingCart: { orderDish, tableId } }) {
   const [dishList, setDishList] = useState([])
+  const [isModalVisible, setIsModelVisiable] = useState(false)
 
-  // const dishList = [
-  //   { dishId: 1, dishName: '麻婆豆腐', price: 32, imgUrl: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3485532490,4272537981&fm=11&gp=0.jpg' },
-  //   { dishId: 2, dishName: '酸豆角', price: 32, imgUrl: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3485532490,4272537981&fm=11&gp=0.jpg' },
-  //   { dishId: 3, dishName: '外婆菜炒蛋', price: 32, imgUrl: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3485532490,4272537981&fm=11&gp=0.jpg' },
-  //   { dishId: 4, dishName: '酸菜鱼', price: 32, imgUrl: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3485532490,4272537981&fm=11&gp=0.jpg' },
-  // ]
+  // tableId = history.location.query.id
 
   useEffect(() => {
-    fetchDishList().then(res => {
+    if (history.location.query.id) {
+      dispatch({
+        type: 'shoppingCart/selectTable',
+        payload: {
+          tableId: history.location.query.id
+        }
+      })
+    }
+    fetchDish({}).then(res => {
       setDishList(res)
-      console.log(res, 'dishList');
+      console.log(orderDish);
     })
   }, [])
 
-  const handleAddCart = (id: number) => {
-    console.log(id);
-  }
+  // const handleAddCart = (dish: any) => {
+  //   dispatch({
+  //     type: 'shoppingCart/addDish',
+  //     payload: dish
+  //   })
+  // }
 
   return (
     <div className='dishListStyle'>
       <Row>
         {
-          dishList.map(item => (
-            <Col span={6} key={item['_id']}>
+          dishList.map((item, index) => (
+            <Col span={6} key={index}>
               <Card size="small" className="dishCardStyle" hoverable >
                 <img src={item.imgUrl} width="176" height="176" alt="" />
                 <div className="dishNameStyle"><span>{item.dishName}</span><span>¥{item.price}</span></div>
-                <Button type="primary" onClick={() => handleAddCart(item.dishId)}>加入购物车</Button>
+
+                {/* <Button type="primary" onClick={() => handleAddCart(item)}>加入购物车</Button> */}
+                <Space>
+                  <MinusCircleOutlined
+                    style={{ color: '#2db7f5' }}
+                    onClick={() => {
+                      if (!tableId) { setIsModelVisiable(true) }
+                      dispatch({ type: 'shoppingCart/reduceDish', payload: item })
+                    }} />
+                  <span>{orderDish.find(v => v._id === item._id)?orderDish.find(v => v._id === item._id).count:0}</span>
+                  <PlusCircleOutlined
+                    style={{ color: '#2db7f5' }}
+                    onClick={() => {
+                      if (!tableId) { setIsModelVisiable(true) }
+                      dispatch({ type: 'shoppingCart/addDish', payload: item })
+                    }} />
+                </Space>
               </Card>
             </Col>
           ))
         }
+        <Modal title="Basic Modal" visible={isModalVisible}
+          onOk={() => history.push({
+            pathname: 'mealTable'
+          })}
+        >
+          请选择餐桌
+        </Modal>
       </Row>
     </div>
   );
 }
+
+export default connect(({ shoppingCart }) => ({
+  shoppingCart
+}))(DishList)
