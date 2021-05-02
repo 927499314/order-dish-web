@@ -1,29 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Tag, Space, Button } from 'antd';
+import { Table, Tag, Space, Button, Popconfirm } from 'antd';
 import { history } from 'umi';
 import moment from 'moment'
-import { fetchOrderList } from '@/services/orderList'
+import { fetchOrderList, confirmPayMoney } from '@/services/orderList'
 import './index.less';
 
 function OrderList() {
-  const [tableLoading, setTableLoading] = useState(false)
-  const [orderList, setOrderList] = useState([])
+  let [tableLoading, setTableLoading] = useState(false)
+  let [orderList, setOrderList] = useState([])
+  let [number,setNumber] = useState(0)
 
 
   useEffect(() => {
+    setTableLoading(true)
     fetchOrderList().then(res => {
-      // console.log(res);
-      // if (res.status === 0) {
       setOrderList(res)
-      console.log(res);
-      // }
+      setTableLoading(false)
     })
-  }, [])
+  }, [number])
 
-  const handlePayMoney = ()=>{
-    
+  const handlePayMoney = (record: object) => {
+    let obj = {
+      ...record,
+      status: true
+    }
+    confirmPayMoney(obj).then(res => {
+      console.log(res);
+      setNumber(++number)
+    })
   }
-
   const columns = [
     {
       title: '订单号',
@@ -72,8 +77,11 @@ function OrderList() {
       render: (_, record) => {
         return <Space>
           <Button size="small" >详情</Button>
-          <Button type="primary" size="small" 
-          disabled={record.status} onClick={handlePayMoney}>结账</Button>
+          <Popconfirm title="确认完成付款吗？" okText="确认" cancelText="取消"
+            onConfirm={()=>handlePayMoney(record)} disabled={record.status}>
+            <Button type="primary" size="small"
+              disabled={record.status}>结账</Button>
+          </Popconfirm>
         </Space>
       }
     },

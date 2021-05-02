@@ -11,14 +11,14 @@ export async function fetchOrderList() {
 export async function addOrder(params: any) {
     return request(`${baseUrl}/order`, {
         method: 'POST',
-        data:params
+        data: params
     })
 }
 
 // 结账
-export async function confirmPay(params: any) {
-    return request(`${baseUrl}/order`, {
+export async function confirmPayMoney(params: any) {
+    return request(`${baseUrl}/order/${params._id}`, {
         method: 'PUT',
-        params
+        data: params
     })
 }

@@ -17,17 +17,18 @@ function ShoppingCart({
 
     const hanldeOrder = () => {
         let orderInfo = {
-            _id: Math.floor(Math.random()*10000000000),
+            _id: 'ID-'+Math.floor(Math.random()*100000000),
             tableId,
             personNum: 4,
             dishAll: orderDish,
             totalPrice,
-            status: 0
+            status: false
         }
         addOrder(orderInfo).then(res => {
             console.log(res);
         })
         dispatch({type:'shoppingCart/clearCart'})
+        setTotalprice(0)
     }
 
     useEffect(() => {
