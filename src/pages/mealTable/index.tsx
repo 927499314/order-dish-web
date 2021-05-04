@@ -4,37 +4,9 @@ import { history, connect } from 'umi';
 import './index.less';
 import { fetchMealTable } from '@/services/MealTable';
 
-// const mealTableList = [
-//     {
-//         tableId: '01',
-//         tableSize: 'small',
-//         status: 0
-//     },
-//     {
-//         tableId: '02',
-//         tableSize: 'small',
-//         status: 0
-//     },
-//     {
-//         tableId: '03',
-//         tableSize: 'small',
-//         status: 1
-//     },
-//     {
-//         tableId: '04',
-//         tableSize: 'middle',
-//         status: 1
-//     },
-//     {
-//         tableId: '05',
-//         tableSize: 'middle',
-//         status: 0
-//     }
-// ]
-
 function MealTable() {
 
-    let [mealTableList,setMealTableList] = useState([])
+    let [mealTableList, setMealTableList] = useState([])
 
     const countSize = (size: any) => {
         switch (size) {
@@ -55,29 +27,32 @@ function MealTable() {
 
     useEffect(() => {
         fetchMealTable().then(res => {
+            res.sort((a, b) => (
+                parseInt(a._id) - parseInt(b._id)
+            ))
             console.log(res);
             setMealTableList(res)
         })
     }, [])
 
     return (
-        <div className='mealTableStyle'>
+        <Card className='mealTableStyle'>
             <Row>
                 {
                     mealTableList?.map(item => (
-                        <Col span={6} key={item.tableId}>
+                        <Col span={6} key={item._id}>
                             <Card size="small" hoverable className="mealTableCard" style={{ width: 160, height: 160 }} >
-                                <div style={{ fontSize: 20, margin: '10px' }}>桌号：{item.tableId}</div>
-                                <div>{countSize(item.tableSize)}</div>
+                                <div style={{ fontSize: 18, margin: '10px 0 5px 0' }}>桌号：{item._id}</div>
+                                <div>{countSize(item.size)}</div>
                                 <div className="tableStatus">
-                                    {item.status === 1 ? <div style={{ fontSize: 16 }}>用餐中</div> : <Button type="primary" onClick={() => handleOrder(item.tableId)}>点餐</Button>}
+                                    {item.status === true ? <div style={{ fontSize: 18 }}>用餐中</div> : <Button type="primary" onClick={() => handleOrder(item._id)}>点餐</Button>}
                                 </div>
                             </Card>
                         </Col>
                     ))
                 }
             </Row>
-        </div>
+        </Card>
     );
 }
 

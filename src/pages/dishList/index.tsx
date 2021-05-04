@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Button, Space, Modal } from 'antd';
+import { Card, Row, Col, Space, Modal } from 'antd';
 import { history, connect } from 'umi';
-// import { fetchDishList } from '@/services/dishList'
 import { fetchDish } from '@/services/dishManage'
 import './index.less';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
@@ -9,8 +8,6 @@ import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 function DishList({ dispatch, shoppingCart: { orderDish, tableId } }) {
   const [dishList, setDishList] = useState([])
   const [isModalVisible, setIsModelVisiable] = useState(false)
-
-  // tableId = history.location.query.id
 
   useEffect(() => {
     if (history.location.query.id) {
@@ -22,17 +19,11 @@ function DishList({ dispatch, shoppingCart: { orderDish, tableId } }) {
       })
     }
     fetchDish({}).then(res => {
-      setDishList(res)
+      let dishArr = res.filter(v => v.status === true)
+      setDishList(dishArr)
       console.log(orderDish);
     })
   }, [])
-
-  // const handleAddCart = (dish: any) => {
-  //   dispatch({
-  //     type: 'shoppingCart/addDish',
-  //     payload: dish
-  //   })
-  // }
 
   return (
     <div className='dishListStyle'>
@@ -43,8 +34,6 @@ function DishList({ dispatch, shoppingCart: { orderDish, tableId } }) {
               <Card size="small" className="dishCardStyle" hoverable >
                 <img src={item.imgUrl} width="176" height="176" alt="" />
                 <div className="dishNameStyle"><span>{item.dishName}</span><span>¥{item.price}</span></div>
-
-                {/* <Button type="primary" onClick={() => handleAddCart(item)}>加入购物车</Button> */}
                 <Space>
                   <MinusCircleOutlined
                     style={{ color: '#2db7f5' }}
@@ -52,7 +41,7 @@ function DishList({ dispatch, shoppingCart: { orderDish, tableId } }) {
                       if (!tableId) { setIsModelVisiable(true) }
                       dispatch({ type: 'shoppingCart/reduceDish', payload: item })
                     }} />
-                  <span>{orderDish.find(v => v._id === item._id)?orderDish.find(v => v._id === item._id).count:0}</span>
+                  <span>{orderDish.find(v => v._id === item._id) ? orderDish.find(v => v._id === item._id).count : 0}</span>
                   <PlusCircleOutlined
                     style={{ color: '#2db7f5' }}
                     onClick={() => {

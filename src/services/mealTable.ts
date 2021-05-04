@@ -9,6 +9,13 @@ export async function fetchMealTable() {
     })
 }
 
+// 根据Id获取餐桌详情
+export async function MealTableDetail(params: any) {
+    return request(`${baseUrl}/meal-table/${params}`, {
+        method: 'GET'
+    })
+}
+
 // 添加餐桌
 export async function addMealTable(params: any) {
     return request(`${baseUrl}/meal-table`, {

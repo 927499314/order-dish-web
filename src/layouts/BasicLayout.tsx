@@ -18,7 +18,7 @@ import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import type { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
-import logo from '../assets/logo.svg';
+import logo from '../assets/image2.png';
 
 const noMatch = (
   <Result
@@ -90,6 +90,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     },
   } = props;
 
+  settings.title = ''
+
   const menuDataRef = useRef<MenuDataItem[]>([]);
 
   useEffect(() => {
@@ -98,6 +100,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         type: 'user/fetchCurrent',
       });
     }
+    console.log(props,'props');
   }, []);
   /** Init variables */
 
@@ -127,7 +130,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       {...props}
       {...settings}
       onCollapse={handleMenuCollapse}
-      onMenuHeaderClick={() => history.push('/')}
+      // onMenuHeaderClick={() => history.push('/')}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (
           menuItemProps.isUrl ||
@@ -153,12 +156,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      footerRender={() => {
-        if (settings.footerRender || settings.footerRender === undefined) {
-          return defaultFooterDom;
-        }
-        return null;
-      }}
+      // footerRender={() => {
+      //   if (settings.footerRender || settings.footerRender === undefined) {
+      //     return defaultFooterDom;
+      //   }
+      //   return null;
+      // }}
       menuDataRender={menuDataRender}
       rightContentRender={() => <RightContent />}
       postMenuData={(menuData) => {

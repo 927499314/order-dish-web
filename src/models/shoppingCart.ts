@@ -52,7 +52,7 @@ export default {
             return { ...state, ...payload }
         },
         clearCart(state, action){
-            return {...state, table:'', orderDish:[]}
+            return {...state, tableId:'', orderDish:[]}
         }
     }
 };

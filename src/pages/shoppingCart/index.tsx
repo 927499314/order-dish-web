@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Image, Table, Space, Button } from 'antd';
-import { history, connect } from 'umi';
-// import { fetchDishList } from '@/services/dishList'
+import { Card, Table, Space, Button, message } from 'antd';
+import { connect } from 'umi';
 import './index.less';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { addOrder } from '@/services/orderList';
+import { updateMealTable, MealTableDetail } from '@/services/MealTable';
 
 
 function ShoppingCart({
@@ -13,11 +13,12 @@ function ShoppingCart({
 }) {
 
     let [totalPrice, setTotalprice] = useState(0)
+    let [number, setNumber] = useState(0)
 
 
     const hanldeOrder = () => {
         let orderInfo = {
-            _id: 'ID-'+Math.floor(Math.random()*100000000),
+            _id: new Date().getTime(),
             tableId,
             personNum: 4,
             dishAll: orderDish,
@@ -26,9 +27,16 @@ function ShoppingCart({
         }
         addOrder(orderInfo).then(res => {
             console.log(res);
+            message.success("已成功下单")
+            MealTableDetail(orderInfo.tableId).then(res => {
+                res.status = true;
+                console.log(res, 'tabledetail');
+                updateMealTable(res)
+            })
+
         })
-        dispatch({type:'shoppingCart/clearCart'})
         setTotalprice(0)
+        dispatch({ type: 'shoppingCart/clearCart' })
     }
 
     useEffect(() => {
@@ -37,7 +45,7 @@ function ShoppingCart({
             sum += v.price * v.count
         })
         setTotalprice(sum)
-    }, [])
+    }, [number])
 
     const columns = [
         {
@@ -59,25 +67,26 @@ function ShoppingCart({
             dataIndex: 'count',
             render: (text, record) => (
                 <Space>
-                    <MinusCircleOutlined
+                    {/* <MinusCircleOutlined
                         style={{ color: '#2db7f5' }}
                         onClick={() => {
                             dispatch({ type: 'shoppingCart/reduceDish', payload: record })
-
-                        }} />
+                            setNumber(number++)
+                        }} /> */}
                     <span>{text}</span>
-                    <PlusCircleOutlined
+                    {/* <PlusCircleOutlined
                         style={{ color: '#2db7f5' }}
                         onClick={() => {
                             dispatch({ type: 'shoppingCart/addDish', payload: record })
-                        }} />
+                            setNumber(number++)
+                        }} /> */}
                 </Space>
             )
         }
     ]
 
     return (
-        <div className='shoppingCart'>
+        <Card className='shoppingCart'>
             <div className="tableId">桌号：{tableId}</div>
             <Table
                 bordered
@@ -90,7 +99,7 @@ function ShoppingCart({
                 <div className="totalPrice">合计：￥{totalPrice}</div>
                 <Button type="primary" className="order" onClick={hanldeOrder}>下单</Button>
             </div>
-        </div>
+        </Card>
     );
 }
 

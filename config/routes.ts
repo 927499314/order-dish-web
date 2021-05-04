@@ -60,7 +60,20 @@
                     component: './admin/dipendenteManage',
                     authority: ['admin'],
                   },
+                  {
+                    path: '/admin/profitChart',
+                    name: 'profitChart',
+                    icon: 'smile',
+                    component: './admin/profitChart',
+                    authority: ['admin'],
+                  },
                 ],
+              },
+              {
+                name: 'mealTable',
+                icon: 'BlockOutlined',
+                path: '/mealTable',
+                component: './mealTable',
               },
               {
                 name: 'dishList',
@@ -69,14 +82,8 @@
                 component: './dishList',
               },
               {
-                name: 'mealTable',
-                icon: 'AppstoreOutlined',
-                path: '/mealTable',
-                component: './mealTable',
-              },
-              {
                 name: 'shoppingCart',
-                icon: 'smile',
+                icon: 'ShoppingCartOutlined',
                 path: '/shoppingCart',
                 component: './shoppingCart',
               },

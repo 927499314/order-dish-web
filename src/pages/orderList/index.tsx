@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Tag, Space, Button, Popconfirm } from 'antd';
-import { history } from 'umi';
+import { Table, Tag, Space, Button, Popconfirm, Card } from 'antd';
 import moment from 'moment'
 import { fetchOrderList, confirmPayMoney } from '@/services/orderList'
 import './index.less';
+import { updateMealTable, MealTableDetail } from '@/services/MealTable';
 
 function OrderList() {
   let [tableLoading, setTableLoading] = useState(false)
@@ -14,19 +14,26 @@ function OrderList() {
   useEffect(() => {
     setTableLoading(true)
     fetchOrderList().then(res => {
+      console.log(res,'1231');
       setOrderList(res)
       setTableLoading(false)
     })
   }, [number])
 
   const handlePayMoney = (record: object) => {
-    let obj = {
+    let orderInfo = {
       ...record,
       status: true
     }
-    confirmPayMoney(obj).then(res => {
+    confirmPayMoney(orderInfo).then(res => {
       console.log(res);
       setNumber(++number)
+      MealTableDetail(res.tableId).then(res=>{
+        res.status = false;
+        updateMealTable(res).then(res=>{
+            console.log(res,'update');
+        })
+    })
     })
   }
   const columns = [
@@ -61,7 +68,7 @@ function OrderList() {
       width: 120,
       align: 'center',
       render: (text: boolean) => {
-        return text ? <Tag color="blue">已结账</Tag> : <Tag color="green">用餐中</Tag>
+        return text ? <Tag color="green">已结账</Tag> : <Tag color="blue">用餐中</Tag>
       }
     },
     {
@@ -69,7 +76,7 @@ function OrderList() {
       dataIndex: 'createdAt',
       width: 200,
       align: 'center',
-      render: (text: any) => text ? <span>{moment(text).format('YYYY-MM-DD HH:MM:SS')}</span> : ''
+      render: (text: any) => text ? <span>{moment(text).format('lll')}</span> : ''
     },
     {
       title: '操作',
@@ -88,7 +95,7 @@ function OrderList() {
   ]
 
   return (
-    <div className="orderListStyle">
+    <Card className="orderListStyle">
       <Table
         bordered
         rowKey="_id"
@@ -97,7 +104,7 @@ function OrderList() {
         loading={tableLoading}
         size="small"
       />
-    </div>
+    </Card>
   );
 }
 

@@ -67,7 +67,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
         </a>
       </Tooltip> */}
     
-      <a href="#"
+      {/* <a href="#"
         style={{
           color: 'inherit',
           marginRight: '10px'
@@ -77,7 +77,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = (props) => {
           <ShoppingCartOutlined style={{ fontSize: '18px' }} />
 
         </Badge>
-      </a>
+      </a> */}
 
       <Avatar />
       {REACT_APP_ENV && (

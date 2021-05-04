@@ -1,65 +1,88 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Table, Form, Button, Space, Tag, Input, Modal, message } from 'antd';
-import { addMealTable, fetchMealTable, updateMealTable } from '@/services/MealTable';
+import { Card, Table, Form, Button, Space, Tag, Input, Modal, message, Radio, Popconfirm } from 'antd';
+import { addMealTable, fetchMealTable, updateMealTable, deleteMealTable, MealTableDetail } from '@/services/MealTable';
+
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+}
 
 export default (): React.ReactNode => {
   let [form] = Form.useForm()
   let [mealTableList, setMealTableList] = useState([]);
-  // const [tableLoading, setTableLoading] = useState(false);
+  let [tableLoading, setTableLoading] = useState(false);
   let [isModalVisible, setIsModalVisible] = useState(false);
   let [mealTableDetail, setMealTableDetail] = useState({});
   let [isEdit, setIsEdit] = useState(false);
-  let [number,setNumber] = useState(0)
+  let [number, setNumber] = useState(0)
 
   const countSize = (size: any) => {
     switch (size) {
-      case 'small': return '1-2人';
-      case 'middle': return '3-4人';
-      case 'large': return '4-8人'
+      case 'small': return '1-4人';
+      case 'middle': return '4-8人';
+      case 'large': return '>8人'
     }
   }
   const columns = [
     {
       title: '桌号',
-      dataIndex: 'tableId',
+      dataIndex: '_id',
+      align: 'center'
     },
     {
       title: '容纳人数',
       dataIndex: 'size',
+      align: 'center',
       render: (text) => (countSize(text))
     },
     {
       title: '状态',
       dataIndex: 'status',
+      align: 'center',
       render: (text) => (
-        text ? <Tag>用餐中</Tag> : <Tag>空闲</Tag>
+        text ? <Tag color="blue">用餐中</Tag> : <Tag color="green">空闲</Tag>
       )
     },
     {
       title: '操作',
       dataIndex: 'action',
+      align: 'center',
       render: (text, record) => (
         <Space>
-          <Button type="primary" size="small">修改</Button>
-          <Button type="primary" danger size="small">删除</Button>
+          <Button type="primary" size="small" onClick={() => handleEdit(record._id)}>编辑</Button>
+          <Popconfirm
+            title="你确定要删除这个餐桌吗?"
+            onConfirm={() => handleDelete(record._id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary" danger size="small">删除</Button>
+          </Popconfirm>
         </Space>
       )
     }
   ]
 
-  useEffect(() => {
-
-    fetchMealTable().then(res => {
-      setMealTableList(res)
-    })
-  }, [])
-
   const handleAddTable = () => {
-    let obj = {
+    setIsModalVisible(true)
+  }
 
-    }
-    addMealTable(obj).then(res => {
+  const handleEdit = (id: any) => {
+    MealTableDetail(id).then(res => {
+      console.log(res, '123');
+      setMealTableDetail(res)
+      form.setFieldsValue({ ...res })
+      console.log(form.getFieldsValue());
+    })
+    setIsModalVisible(true)
+    setIsEdit(true)
+  }
 
+
+  const handleDelete = (id: any) => {
+    deleteMealTable(id).then(res => {
+      console.log(res, '123');
+      setNumber(number++);
     })
   }
 
@@ -71,18 +94,38 @@ export default (): React.ReactNode => {
           ...value
         }
         updateMealTable(data).then(res => {
-          message.success("更新菜品成功")
+          message.success("更新餐桌成功")
         })
       } else {
         addMealTable(value).then(res => {
-          message.success("添加菜品成功")
+          message.success("添加餐桌成功")
         })
+        console.log(value);
       }
       form.resetFields()
       setNumber(number + 1)
     })
     setIsModalVisible(false)
+    setIsEdit(false)
   }
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setIsEdit(false)
+    form.resetFields()
+  }
+
+  useEffect(() => {
+    setTableLoading(true)
+    fetchMealTable().then(res => {
+      res.sort((a, b) => (
+        parseInt(a._id) - parseInt(b._id)
+      ))
+      setMealTableList(res)
+      console.log(res);
+      setTableLoading(false)
+    })
+  }, [number])
 
   return (
     <Card>
@@ -92,31 +135,46 @@ export default (): React.ReactNode => {
         rowKey="_id"
         dataSource={mealTableList}
         columns={columns}
-        // loading={tableLoading}
+        loading={tableLoading}
         size="small"
       />
-      <Modal title={isEdit ? '编辑菜品' : '添加菜品'} visible={isModalVisible} onOk={handleSubmit} onCancel={() => setIsModalVisible(false)}>
+      <Modal width={400} title={isEdit ? '编辑餐桌' : '添加餐桌'} visible={isModalVisible} onOk={handleSubmit} onCancel={handleCancel}>
         <Form
-          // {...layout}
+          {...layout}
           form={form}
           style={{ width: 350, margin: '0 auto' }}
           initialValues={{
-            status: true,
+            status: false,
+            size: 'small'
           }}
         >
           <Form.Item
             label="桌号"
-            name="dishName"
+            name="_id"
             rules={[{ required: true, message: '请输入桌号!' }]}
           >
             <Input allowClear />
           </Form.Item>
           <Form.Item
-            label="容纳人数"
+            label="餐桌大小"
             name="size"
-            rules={[{ required: true, message: '请输入容纳人数' }]}
+            rules={[{ required: true, message: '请输入餐桌大小!' }]}
           >
-            <Input allowClear />
+            <Radio.Group>
+              <Radio value="small">small</Radio>
+              <Radio value="middle">middle</Radio>
+              <Radio value="large">large</Radio>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item
+            label="餐桌状态"
+            name="status"
+            rules={[{ required: true, message: '请输入餐桌状态!' }]}
+          >
+            <Radio.Group>
+              <Radio value="true">用餐中</Radio>
+              <Radio value="false">空闲</Radio>
+            </Radio.Group>
           </Form.Item>
         </Form>
       </Modal>

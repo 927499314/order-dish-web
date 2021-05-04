@@ -57,4 +57,5 @@ export default {
   'menu.admin.dish-manage': '菜品管理',
   'menu.admin.table-manage': '餐桌管理',
   'menu.admin.dipendente-manage': '员工信息',
+  'menu.admin.profitChart': '营业额',
 };
