@@ -11,10 +11,8 @@ function ShoppingCart({
     dispatch,
     shoppingCart: { orderDish, tableId }
 }) {
-
     let [totalPrice, setTotalprice] = useState(0)
     let [number, setNumber] = useState(0)
-
 
     const hanldeOrder = () => {
         let orderInfo = {
@@ -33,7 +31,6 @@ function ShoppingCart({
                 console.log(res, 'tabledetail');
                 updateMealTable(res)
             })
-
         })
         setTotalprice(0)
         dispatch({ type: 'shoppingCart/clearCart' })
@@ -102,7 +99,6 @@ function ShoppingCart({
         </Card>
     );
 }
-
 
 export default connect(({ shoppingCart }) => ({
     shoppingCart
