@@ -35,7 +35,7 @@ export default (): React.ReactNode => {
         <Alert
           icon={<SmileOutlined />}
           message="温馨提示"
-          description="请先选择餐桌在点餐，点完后在购物车中下单"
+          description="请先选择餐桌再点餐，将菜品加入购物车，在购物车中下单"
           type="success"
           showIcon
         />

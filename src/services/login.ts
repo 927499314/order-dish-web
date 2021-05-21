@@ -1,4 +1,7 @@
 import request from '@/utils/request';
+import umiRequest from 'umi-request'
+
+const baseUrl = 'localhost:8000'
 
 export type LoginParamsType = {
   userName: string;
@@ -16,4 +19,11 @@ export async function fakeAccountLogin(params: LoginParamsType) {
 
 export async function getFakeCaptcha(mobile: string) {
   return request(`/api/login/captcha?mobile=${mobile}`);
+}
+
+export async function register(params:any){
+  return umiRequest('baseUrl/register',{
+    method: 'POST',
+    data: params
+  })
 }

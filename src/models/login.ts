@@ -60,6 +60,9 @@ const Model = {
         history.replace(redirect || '/');
       }
     },
+    register({payload}) {
+      console.log(payload);
+    },
 
     logout() {
       const { redirect } = getPageQuery();

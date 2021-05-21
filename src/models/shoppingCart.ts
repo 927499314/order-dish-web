@@ -9,9 +9,7 @@ export default {
     effects: {
         *addOrder({ payload }, { call, put }) {
             const res = yield call(addOrder, payload)
-            if (res) {
-
-            }
+            if (res) { }
         }
     },
     reducers: {
