@@ -90,6 +90,13 @@ function OrderList() {
       }
     },
     {
+      title: '员工',
+      dataIndex: 'username',
+      width: 120,
+      align: 'center',
+      render: (text: boolean) => text ? text : 'user'
+    },
+    {
       title: '创建时间',
       dataIndex: 'createdAt',
       width: 200,
@@ -143,7 +150,7 @@ function OrderList() {
         loading={tableLoading}
         size="small"
       />
-      <Modal title="订单详情 " footer={null} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="订单详情" footer={null} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <Table
           bordered
           rowKey="_id"

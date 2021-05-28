@@ -44,6 +44,7 @@ const Model = {
         // const urlParams = new URL(window.location.href);
         // const params = getPageQuery();
         message.success('🎉 🎉 🎉  登录成功！');
+        localStorage.setItem("currentUser", payload._id)
         // let { redirect } = params as { redirect: string };
         // if (redirect) {
         //   const redirectUrlParams = new URL(redirect);
@@ -64,6 +65,9 @@ const Model = {
     *register({ payload }, { call, put }) {
       payload.userId = '1' + Math.floor(Math.random() * 10000)
       payload.type = "user";
+      payload.name = 1;
+      payload.phone = 1;
+      payload.address = 1;
       const res = yield call(addStaff, payload);
       return res
     },

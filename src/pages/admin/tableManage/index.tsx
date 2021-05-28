@@ -14,7 +14,6 @@ export default (): React.ReactNode => {
   let [isModalVisible, setIsModalVisible] = useState(false);
   let [mealTableDetail, setMealTableDetail] = useState({});
   let [isEdit, setIsEdit] = useState(false);
-  let [number, setNumber] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -67,7 +66,7 @@ export default (): React.ReactNode => {
     }
   ]
 
-  
+
   const fetchData = () => {
     setTableLoading(true);
     fetchMealTable().then(res => {
@@ -97,7 +96,8 @@ export default (): React.ReactNode => {
 
   const handleDelete = (id: any) => {
     deleteMealTable(id).then(res => {
-      setNumber(number++);
+      fetchData();
+      message.success("删除餐桌成功")
     })
   }
 

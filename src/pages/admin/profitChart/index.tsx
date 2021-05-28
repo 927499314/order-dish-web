@@ -56,7 +56,7 @@ function ProfitChart() {
             console.log(res);
             let dataObj = {}, countObj = {}
             let date;
-            res.map(v => {
+            res.reverse().map(v => {
                 date = moment(v.createdAt).format("l");
                 if (!dataObj[date]) {
                     dataObj[date] = 0

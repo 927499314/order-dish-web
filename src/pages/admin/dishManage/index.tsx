@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Table, Button, Space, Modal, Form, Input, Radio, InputNumber, message, Tag } from 'antd';
+import { Card, Table, Button, Space, Modal, Form, Input, Radio, InputNumber, message, Tag, Popconfirm } from 'antd';
 import { fetchDishList, addDish, deleteDish, updateDish, fetchDishDetail } from '@/services/dishManage'
 
 const layout = {
@@ -56,7 +56,14 @@ export default (): React.ReactNode => {
       render: (text: any, record: any) => (
         <Space>
           <Button type="primary" size="small" onClick={() => handleDishDetail(record._id)}>编辑</Button>
-          <Button type="primary" size="small" danger onClick={() => handleDeleteDish(record._id)}>删除</Button>
+          <Popconfirm
+            title="你确定要删除这个菜品吗?"
+            onConfirm={() => handleDeleteDish(record._id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary" danger size="small">删除</Button>
+          </Popconfirm>
         </Space>
       )
     },
@@ -72,8 +79,8 @@ export default (): React.ReactNode => {
   // 删除菜品
   const handleDeleteDish = (id: any) => {
     deleteDish(id).then(res => {
-      message.success("删除菜品成功")
-      setPagination({ pageNum: 1, pageSize: 10, total: 0 })
+      message.success("删除菜品成功");
+      setPagination({ pageNum: 1, pageSize: 5, total: 0 })
       setNumber(number + 1);
     })
   }

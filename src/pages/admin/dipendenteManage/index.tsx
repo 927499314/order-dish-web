@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Table, Button, Space, Modal, Form, Input, Radio, InputNumber, message, Tag } from 'antd';
+import { Card, Table, Button, Space, Modal, Form, Input, Radio, InputNumber, message, Tag, Popconfirm } from 'antd';
 import { fetchStaffList, deleteStaff, fetchStaffDetail, updateStaff, addStaff } from '@/services/staff';
 import moment from 'moment';
 
@@ -31,6 +31,12 @@ export default (): React.ReactNode => {
       align: 'center',
     },
     {
+      title: "用户类型",
+      dataIndex: 'type',
+      align: 'center',
+      render: (text) => text === 'admin' ? <Tag color='green'>管理员</Tag> : <Tag color="blue">普通用户</Tag>
+    },
+    {
       title: "姓名",
       dataIndex: 'name',
       align: 'center',
@@ -57,8 +63,15 @@ export default (): React.ReactNode => {
       align: 'center',
       render: (text: any, record: any) => (
         <Space>
-          <Button type="primary" size="small" onClick={() => handleStaffDetail(record._id)}>编辑</Button>
-          <Button type="primary" size="small" danger onClick={() => handleDeleteStaff(record._id)}>删除</Button>
+          <Button type="primary" size="small" onClick={() => handleStaffDetail(record)}>编辑</Button>
+          <Popconfirm
+            title="你确定要删除这个员工吗?"
+            onConfirm={() => handleDeleteStaff(record._id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary" danger size="small" disabled={record.type === 'admin'}>删除</Button>
+          </Popconfirm>
         </Space>
       )
     },
@@ -71,19 +84,19 @@ export default (): React.ReactNode => {
     form.resetFields();
   }
 
-  // 删除菜品
+  // 删除员工
   const handleDeleteStaff = (id: any) => {
     deleteStaff(id).then(res => {
-      message.success("删除菜品成功")
+      message.success("删除员工成功")
       setNumber(number + 1)
     })
   }
 
-  // 获取菜品详情
-  const handleStaffDetail = (id: any) => {
-    setIsEdit(true)
-    fetchStaffDetail(id).then(res => {
-      setStaffDetail(res)
+  // 获取员工详情
+  const handleStaffDetail = (record) => {
+    setIsEdit(true);
+    fetchStaffDetail(record._id).then(res => {
+      setStaffDetail(res);
       form.setFieldsValue({ ...res })
       setIsModalVisible(true)
     })
@@ -95,15 +108,15 @@ export default (): React.ReactNode => {
       if (isEdit) {
         const data = {
           _id: staffDetail['_id'],
-          userId:staffDetail['userId'],
+          userId: staffDetail['userId'],
           ...value
         }
         updateStaff(data).then(res => {
           setNumber(number + 1)
-          message.success("更新员工信息成功")
+          message.success("更新员工信息成功");
         })
       } else {
-        value.userId = '1' + Math.floor(Math.random() * 10000)
+        value.userId = '1' + Math.floor(Math.random() * 10000);
         console.log(value);
         addStaff(value).then(res => {
           setNumber(number + 1)
@@ -120,6 +133,7 @@ export default (): React.ReactNode => {
     setTableLoading(true)
     fetchStaffList().then(res => {
       setStaffList(res);
+      console.log(res);
       setTableLoading(false);
     })
   }, [number])
@@ -144,20 +158,20 @@ export default (): React.ReactNode => {
           form={form}
           style={{ width: 350, margin: '0 auto' }}
         >
-          <Form.Item
+          {/* <Form.Item
             label="用户名"
             name="_id"
             rules={[{ required: true, message: '请输入用户名!' }]}
           >
             <Input allowClear />
-          </Form.Item>
-          <Form.Item
+          </Form.Item> */}
+          {/* <Form.Item
             label="密码"
             name="password"
             rules={[{ required: true, message: '请输入密码!' }]}
           >
             <Input allowClear />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             label="姓名"
             name="name"

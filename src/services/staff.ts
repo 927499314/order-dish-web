@@ -9,7 +9,7 @@ export async function fetchStaffList() {
     })
 }
 
-// 添加菜品
+// 添加员工
 export async function addStaff(params: any) {
     return request(`${baseUrl}/user`, {
         method: 'POST',
@@ -17,22 +17,22 @@ export async function addStaff(params: any) {
     })
 }
 
-// 获取菜品详情
+// 获取员工详情
 export async function fetchStaffDetail(params: any) {
     return request(`${baseUrl}/user/${params}`, {
         method: 'GET'
     })
 }
 
-// 修改菜品
+// 修改员工信息
 export async function updateStaff(params: any) {
-    return request(`${baseUrl}/dish/${params._id}`, {
+    return request(`${baseUrl}/user/${params._id}`, {
         method: 'PUT',
         data: params
     })
 }
 
-// 删除菜品
+// 删除员工信息
 export async function deleteStaff(params: string) {
     return request(`${baseUrl}/user/${params}`, {
         method: 'DELETE',

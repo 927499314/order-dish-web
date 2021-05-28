@@ -9,19 +9,22 @@ import { updateMealTable, MealTableDetail } from '@/services/MealTable';
 
 function ShoppingCart({
     dispatch,
-    shoppingCart: { orderDish, tableId }
+    shoppingCart: { orderDish, tableId, personNum }
 }) {
     let [totalPrice, setTotalprice] = useState(0)
     let [number, setNumber] = useState(0)
 
+    let currentUser = localStorage.getItem("currentUser")
+    console.log(currentUser);
     const hanldeOrder = () => {
         let orderInfo = {
             _id: new Date().getTime(),
             tableId,
-            personNum: 4,
+            personNum,
             dishAll: orderDish,
             totalPrice,
-            status: false
+            status: false,
+            username: currentUser
         }
         addOrder(orderInfo).then(res => {
             console.log(res);
@@ -88,6 +91,7 @@ function ShoppingCart({
     return (
         <Card className='shoppingCart'>
             <div className="tableId">桌号：{tableId}</div>
+            <div className="tableId">用餐人数：{personNum}</div>
             <Table
                 bordered
                 rowKey="_id"

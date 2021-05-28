@@ -4,12 +4,13 @@ export default {
     namespace: "shoppingCart",
     state: {
         tableId: '',
+        personNum: '',
         orderDish: []
     },
     effects: {
         *addOrder({ payload }, { call, put }) {
-            const res = yield call(addOrder, payload)
-            if (res) { }
+            const res = yield call(addOrder, payload);
+            return res
         }
     },
     reducers: {
@@ -40,7 +41,7 @@ export default {
                         v.count--
                     } else {
                         let index = orderDish.findIndex(v => v._id == payload._id)
-                        orderDish.splice(index,1)
+                        orderDish.splice(index, 1)
                     }
                 }
             })
@@ -49,8 +50,11 @@ export default {
         selectTable(state, { payload }) {
             return { ...state, ...payload }
         },
-        clearCart(state, action){
-            return {...state, tableId:'', orderDish:[]}
+        selectPersonNum(state, { payload }) {
+            return { ...state, ...payload }
+        },
+        clearCart(state, action) {
+            return { ...state, tableId: '', personNum: '', orderDish: [] }
         }
     }
 };

@@ -18,6 +18,14 @@ function DishList({ dispatch, shoppingCart: { orderDish, tableId } }) {
         }
       })
     }
+    if (history.location.query.personNum) {
+      dispatch({
+        type: 'shoppingCart/selectPersonNum',
+        payload: {
+          personNum: history.location.query.personNum
+        }
+      })
+    }
     fetchDish({}).then(res => {
       let dishArr = res.filter(v => v.status === true)
       setDishList(dishArr)
