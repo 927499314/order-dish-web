@@ -100,7 +100,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         type: 'user/fetchCurrent',
       });
     }
-    console.log(props,'props');
   }, []);
   /** Init variables */
 

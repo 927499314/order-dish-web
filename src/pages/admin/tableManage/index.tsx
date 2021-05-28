@@ -14,7 +14,11 @@ export default (): React.ReactNode => {
   let [isModalVisible, setIsModalVisible] = useState(false);
   let [mealTableDetail, setMealTableDetail] = useState({});
   let [isEdit, setIsEdit] = useState(false);
-  let [number, setNumber] = useState(0)
+  let [number, setNumber] = useState(0);
+
+  useEffect(() => {
+    fetchData();
+  }, [])
 
   const countSize = (size: any) => {
     switch (size) {
@@ -63,25 +67,36 @@ export default (): React.ReactNode => {
     }
   ]
 
+  
+  const fetchData = () => {
+    setTableLoading(true);
+    fetchMealTable().then(res => {
+      res.sort((a, b) => (
+        parseInt(a._id) - parseInt(b._id)
+      ))
+      setMealTableList(res);
+      setTableLoading(false)
+    })
+  }
+
   const handleAddTable = () => {
+    setIsEdit(false);
     setIsModalVisible(true)
+    form.resetFields();
   }
 
   const handleEdit = (id: any) => {
     MealTableDetail(id).then(res => {
-      console.log(res, '123');
-      setMealTableDetail(res)
+      setMealTableDetail(res);
       form.setFieldsValue({ ...res })
-      console.log(form.getFieldsValue());
     })
     setIsModalVisible(true)
-    setIsEdit(true)
+    setIsEdit(true);
   }
 
 
   const handleDelete = (id: any) => {
     deleteMealTable(id).then(res => {
-      console.log(res, '123');
       setNumber(number++);
     })
   }
@@ -94,19 +109,19 @@ export default (): React.ReactNode => {
           ...value
         }
         updateMealTable(data).then(res => {
-          message.success("更新餐桌成功")
+          message.success("更新餐桌成功");
+          fetchData();
         })
       } else {
         addMealTable(value).then(res => {
-          message.success("添加餐桌成功")
+          message.success("添加餐桌成功");
+          fetchData();
         })
-        console.log(value);
       }
       form.resetFields()
-      setNumber(number + 1)
+      setIsModalVisible(false)
+      setIsEdit(false)
     })
-    setIsModalVisible(false)
-    setIsEdit(false)
   }
 
   const handleCancel = () => {
@@ -114,18 +129,6 @@ export default (): React.ReactNode => {
     setIsEdit(false)
     form.resetFields()
   }
-
-  useEffect(() => {
-    setTableLoading(true)
-    fetchMealTable().then(res => {
-      res.sort((a, b) => (
-        parseInt(a._id) - parseInt(b._id)
-      ))
-      setMealTableList(res)
-      console.log(res);
-      setTableLoading(false)
-    })
-  }, [number])
 
   return (
     <Card>
@@ -172,8 +175,8 @@ export default (): React.ReactNode => {
             rules={[{ required: true, message: '请输入餐桌状态!' }]}
           >
             <Radio.Group>
-              <Radio value="true">用餐中</Radio>
-              <Radio value="false">空闲</Radio>
+              <Radio value={true}>用餐中</Radio>
+              <Radio value={false}>空闲</Radio>
             </Radio.Group>
           </Form.Item>
         </Form>

@@ -7,6 +7,13 @@ export async function fetchOrderList() {
     return request(`${baseUrl}/order`)
 }
 
+//根据id查看订单详情
+export async function OrderDetail(params: any) {
+    return request(`${baseUrl}/order/${params}`, {
+        method: 'GET'
+    })
+}
+
 // 下单
 export async function addOrder(params: any) {
     return request(`${baseUrl}/order`, {

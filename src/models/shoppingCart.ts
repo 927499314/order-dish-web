@@ -1,4 +1,4 @@
-import { addOrder } from "../services/shoppingCart";
+import { addOrder } from "../services/orderList";
 
 export default {
     namespace: "shoppingCart",

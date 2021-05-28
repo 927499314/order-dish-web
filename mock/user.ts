@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+// import { fetchStaffList } from '@/services/staff.ts';
 
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
@@ -88,9 +89,9 @@ export default {
     },
   ],
   'POST /api/login/account': async (req: Request, res: Response) => {
-    const { password, userName, type } = req.body;
+    const { password, username, type } = req.body;
     await waitTime(2000);
-    if (password === 'ant.design' && userName === 'admin') {
+    if (password === 'admin' && username === 'admin') {
       res.send({
         status: 'ok',
         type,
@@ -98,19 +99,11 @@ export default {
       });
       return;
     }
-    if (password === 'ant.design' && userName === 'user') {
+    if (password.indexOf('1') != -1) {
       res.send({
         status: 'ok',
         type,
         currentAuthority: 'user',
-      });
-      return;
-    }
-    if (type === 'mobile') {
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin',
       });
       return;
     }

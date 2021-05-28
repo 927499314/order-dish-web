@@ -46,16 +46,22 @@ const Login: React.FC<LoginProps> = (props) => {
 
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
-    console.log(type);
     if (type === 'account') {
       dispatch({
         type: 'login/login',
         payload: { ...values, type },
+      }).then().catch(err => {
+        console.log(err);
       });
-    }else{
+    } else {
       dispatch({
         type: 'login/register',
         payload: { ...values, type },
+      }).then(res => {
+        if (res) {
+          message.success("注册成功");
+          setType('account');
+        }
       })
     }
 
@@ -77,7 +83,7 @@ const Login: React.FC<LoginProps> = (props) => {
           },
         }}
         onFinish={(values) => {
-          handleSubmit(values as LoginParamsType);
+          handleSubmit(values);
           return Promise.resolve();
         }}
       >
@@ -98,7 +104,7 @@ const Login: React.FC<LoginProps> = (props) => {
           />
         </Tabs>
 
-        {status === 'error' && loginType === 'account' && !submitting && (
+        {status === 'error' && !submitting && (
           <LoginMessage
             content={intl.formatMessage({
               id: 'pages.login.accountLogin.errorMessage',
@@ -106,18 +112,20 @@ const Login: React.FC<LoginProps> = (props) => {
             })}
           />
         )}
+
         {type === 'account' && (
           <>
             <ProFormText
-              name="userName"
+              name="_id"
               fieldProps={{
                 size: 'large',
                 prefix: <UserOutlined className={styles.prefixIcon} />,
               }}
-              placeholder={intl.formatMessage({
-                id: 'pages.login.username.placeholder',
-                defaultMessage: '用户名: admin or user',
-              })}
+              placeholder='请输入用户名'
+              // placeholder={intl.formatMessage({
+              //   id: 'pages.login.username.placeholder',
+              //   defaultMessage: '用户名: admin or user',
+              // })}
               rules={[
                 {
                   required: true,
@@ -136,10 +144,11 @@ const Login: React.FC<LoginProps> = (props) => {
                 size: 'large',
                 prefix: <LockOutlined className={styles.prefixIcon} />,
               }}
-              placeholder={intl.formatMessage({
-                id: 'pages.login.password.placeholder',
-                defaultMessage: '密码: ant.design',
-              })}
+              placeholder='请输入密码'
+              // placeholder={intl.formatMessage({
+              //   id: 'pages.login.password.placeholder',
+              //   defaultMessage: '密码: ant.design',
+              // })}
               rules={[
                 {
                   required: true,
@@ -172,21 +181,19 @@ const Login: React.FC<LoginProps> = (props) => {
           </>
         )}
 
-        {status === 'error' && loginType === 'register' && !submitting && (
-          <LoginMessage content="验证码错误" />
-        )}
         {type === 'register' && (
           <>
             <ProFormText
-              name="userName"
+              name="_id"
               fieldProps={{
                 size: 'large',
                 prefix: <UserOutlined className={styles.prefixIcon} />,
               }}
-              placeholder={intl.formatMessage({
-                id: 'pages.login.username.placeholder',
-                defaultMessage: '用户名: admin or user',
-              })}
+              placeholder='请输入用户名'
+              // placeholder={intl.formatMessage({
+              //   id: 'pages.login.username.placeholder',
+              //   defaultMessage: '用户名: admin or user',
+              // })}
               rules={[
                 {
                   required: true,
@@ -205,10 +212,11 @@ const Login: React.FC<LoginProps> = (props) => {
                 size: 'large',
                 prefix: <LockOutlined className={styles.prefixIcon} />,
               }}
-              placeholder={intl.formatMessage({
-                id: 'pages.login.password.placeholder',
-                defaultMessage: '密码: ant.design',
-              })}
+              placeholder='请输入密码'
+              // placeholder={intl.formatMessage({
+              //   id: 'pages.login.password.placeholder',
+              //   defaultMessage: '密码: ant.design',
+              // })}
               rules={[
                 {
                   required: true,

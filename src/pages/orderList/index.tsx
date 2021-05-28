@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Tag, Space, Button, Popconfirm, Card } from 'antd';
+import { Table, Tag, Space, Button, Popconfirm, Card, message, Modal } from 'antd';
 import moment from 'moment'
-import { fetchOrderList, confirmPayMoney } from '@/services/orderList'
+import { fetchOrderList, confirmPayMoney, OrderDetail } from '@/services/orderList'
 import './index.less';
 import { updateMealTable, MealTableDetail } from '@/services/MealTable';
 
 function OrderList() {
   let [tableLoading, setTableLoading] = useState(false)
   let [orderList, setOrderList] = useState([])
-  let [number,setNumber] = useState(0)
+  let [orderDetail, setOrderDetail] = useState({})
+  let [number, setNumber] = useState(0)
+  let [isModalVisible, setIsModelVisible] = useState(false)
+  let [dishList, setDishList] = useState([])
 
 
   useEffect(() => {
     setTableLoading(true)
     fetchOrderList().then(res => {
-      console.log(res,'1231');
       setOrderList(res)
       setTableLoading(false)
     })
@@ -26,16 +28,32 @@ function OrderList() {
       status: true
     }
     confirmPayMoney(orderInfo).then(res => {
-      console.log(res);
       setNumber(++number)
-      MealTableDetail(res.tableId).then(res=>{
+      MealTableDetail(res.tableId).then(res => {
         res.status = false;
-        updateMealTable(res).then(res=>{
-            console.log(res,'update');
+        updateMealTable(res).then(res => {
+          message.success("结账成功");
         })
-    })
+      })
     })
   }
+
+  const handleOrderDetail = (id: any) => {
+    OrderDetail(id).then(res => {
+      setOrderDetail(res);
+      console.log(res.dishAll);
+      setDishList(res.dishAll);
+      setIsModelVisible(true);
+    })
+  }
+
+  const handleOk = () => {
+    setIsModelVisible(false)
+  }
+  const handleCancel = () => {
+    setIsModelVisible(false)
+  }
+
   const columns = [
     {
       title: '订单号',
@@ -83,14 +101,35 @@ function OrderList() {
       dataIndex: 'action',
       render: (_, record) => {
         return <Space>
-          <Button size="small" >详情</Button>
+          <Button size="small" onClick={() => handleOrderDetail(record._id)}>详情</Button>
           <Popconfirm title="确认完成付款吗？" okText="确认" cancelText="取消"
-            onConfirm={()=>handlePayMoney(record)} disabled={record.status}>
+            onConfirm={() => handlePayMoney(record)} disabled={record.status}>
             <Button type="primary" size="small"
               disabled={record.status}>结账</Button>
           </Popconfirm>
         </Space>
       }
+    },
+  ]
+
+  const columns2 = [
+    {
+      title: '菜品名称',
+      dataIndex: 'dishName',
+      width: 100,
+      align: 'center'
+    },
+    {
+      title: '菜品价格',
+      dataIndex: 'price',
+      width: 100,
+      align: 'center'
+    },
+    {
+      title: '菜品数量',
+      dataIndex: 'count',
+      width: 100,
+      align: 'center'
     },
   ]
 
@@ -104,6 +143,15 @@ function OrderList() {
         loading={tableLoading}
         size="small"
       />
+      <Modal title="订单详情 " footer={null} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <Table
+          bordered
+          rowKey="_id"
+          dataSource={dishList}
+          columns={columns2}
+          size="small"
+        />
+      </Modal>
     </Card>
   );
 }

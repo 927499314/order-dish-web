@@ -39,14 +39,14 @@ function DishList({ dispatch, shoppingCart: { orderDish, tableId } }) {
                     style={{ color: '#2db7f5' }}
                     onClick={() => {
                       if (!tableId) { setIsModelVisiable(true) }
-                      dispatch({ type: 'shoppingCart/reduceDish', payload: item })
+                      else { dispatch({ type: 'shoppingCart/reduceDish', payload: item }) }
                     }} />
                   <span>{orderDish.find(v => v._id === item._id) ? orderDish.find(v => v._id === item._id).count : 0}</span>
                   <PlusCircleOutlined
                     style={{ color: '#2db7f5' }}
                     onClick={() => {
                       if (!tableId) { setIsModelVisiable(true) }
-                      dispatch({ type: 'shoppingCart/addDish', payload: item })
+                      else { dispatch({ type: 'shoppingCart/addDish', payload: item }) }
                     }} />
                 </Space>
               </Card>
@@ -57,6 +57,7 @@ function DishList({ dispatch, shoppingCart: { orderDish, tableId } }) {
           onOk={() => history.push({
             pathname: 'mealTable'
           })}
+          onCancel={() => setIsModelVisiable(false)}
         >
           请选择餐桌
         </Modal>

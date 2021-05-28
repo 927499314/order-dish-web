@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { HeartTwoTone, SmileTwoTone } from '@ant-design/icons';
 import { Card, Table, Button, Space, Modal, Form, Input, Radio, InputNumber, message, Tag } from 'antd';
-// import { PageHeaderWrapper, } from '@ant-design/pro-layout';
-// import { useIntl } from 'umi';
 import { fetchDishList, addDish, deleteDish, updateDish, fetchDishDetail } from '@/services/dishManage'
 
 const layout = {
@@ -68,7 +65,8 @@ export default (): React.ReactNode => {
   // 处理添加菜品按钮
   const handleAddDish = () => {
     setIsEdit(false);
-    setIsModalVisible(true)
+    setIsModalVisible(true);
+    form.resetFields();
   }
 
   // 删除菜品
@@ -76,7 +74,7 @@ export default (): React.ReactNode => {
     deleteDish(id).then(res => {
       message.success("删除菜品成功")
       setPagination({ pageNum: 1, pageSize: 10, total: 0 })
-      setNumber(number + 1)
+      setNumber(number + 1);
     })
   }
 
@@ -86,8 +84,8 @@ export default (): React.ReactNode => {
     fetchDishDetail(id).then(res => {
       setDishDetail(res)
       form.setFieldsValue({ ...res })
+      setIsModalVisible(true)
     })
-    setIsModalVisible(true)
   }
 
   // 提交表单
@@ -99,17 +97,19 @@ export default (): React.ReactNode => {
           ...value
         }
         updateDish(data).then(res => {
+          setNumber(number + 1)
           message.success("更新菜品成功")
         })
       } else {
         addDish(value).then(res => {
+          setNumber(number + 1)
           message.success("添加菜品成功")
         })
       }
       form.resetFields()
-      setNumber(number + 1)
+      setIsModalVisible(false);
+      setIsEdit(false)
     })
-    setIsModalVisible(false)
   }
 
   useEffect(() => {

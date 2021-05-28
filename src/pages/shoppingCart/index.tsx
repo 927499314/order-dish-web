@@ -64,23 +64,26 @@ function ShoppingCart({
             dataIndex: 'count',
             render: (text, record) => (
                 <Space>
-                    {/* <MinusCircleOutlined
+                    <MinusCircleOutlined
                         style={{ color: '#2db7f5' }}
-                        onClick={() => {
-                            dispatch({ type: 'shoppingCart/reduceDish', payload: record })
-                            setNumber(number++)
-                        }} /> */}
+                        onClick={() => handleReduceDish(record)} />
                     <span>{text}</span>
-                    {/* <PlusCircleOutlined
+                    <PlusCircleOutlined
                         style={{ color: '#2db7f5' }}
-                        onClick={() => {
-                            dispatch({ type: 'shoppingCart/addDish', payload: record })
-                            setNumber(number++)
-                        }} /> */}
+                        onClick={() => handleAddDish(record)} />
                 </Space>
             )
         }
     ]
+
+    const handleAddDish = async (record) => {
+        dispatch({ type: 'shoppingCart/addDish', payload: record })
+        setNumber(number++)
+    }
+    const handleReduceDish = async (record) => {
+        await dispatch({ type: 'shoppingCart/reduceDish', payload: record })
+        setNumber(number++)
+    }
 
     return (
         <Card className='shoppingCart'>
